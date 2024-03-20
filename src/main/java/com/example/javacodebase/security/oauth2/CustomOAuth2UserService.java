@@ -1,7 +1,7 @@
 package com.example.javacodebase.security.oauth2;
 
 import com.example.javacodebase.exception.OAuth2AuthenticationProcessingException;
-import com.example.javacodebase.model.AuthProvider;
+import com.example.javacodebase.model.enums.AuthProvider;
 import com.example.javacodebase.model.User;
 import com.example.javacodebase.repository.UserRepository;
 import com.example.javacodebase.security.UserPrincipal;

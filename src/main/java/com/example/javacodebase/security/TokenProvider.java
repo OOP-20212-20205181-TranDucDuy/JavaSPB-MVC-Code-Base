@@ -14,7 +14,7 @@ public class TokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
 
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
     public TokenProvider(AppProperties appProperties) {
         this.appProperties = appProperties;
@@ -44,6 +44,7 @@ public class TokenProvider {
     }
 
     public boolean validateToken(String authToken) {
+        System.out.println("authToken: " + authToken);
         try {
             Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(authToken);
             return true;

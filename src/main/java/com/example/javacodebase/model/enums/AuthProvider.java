@@ -1,4 +1,4 @@
-package com.example.javacodebase.model;
+package com.example.javacodebase.model.enums;
 
 public enum  AuthProvider {
     local,

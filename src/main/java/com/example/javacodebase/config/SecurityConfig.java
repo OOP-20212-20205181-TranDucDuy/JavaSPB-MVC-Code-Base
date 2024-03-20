@@ -1,7 +1,8 @@
 package com.example.javacodebase.config;
 
+import com.example.javacodebase.model.enums.RoleType;
 import com.example.javacodebase.security.CustomUserDetailsService;
-
+import com.example.javacodebase.security.RestAuthenticationEntryPoint;
 import com.example.javacodebase.security.TokenAuthenticationFilter;
 import com.example.javacodebase.security.oauth2.CustomOAuth2UserService;
 import com.example.javacodebase.security.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
@@ -80,11 +81,16 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint(new RestAuthenticationEntryPoint()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/file/**").permitAll()
+                        .requestMatchers("/user/**").hasAuthority(RoleType.ADMIN.name())
+                        .anyRequest().authenticated()
+                )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization -> authorization
                                 .baseUri("/oauth2/authorize")
@@ -94,7 +100,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService))
                         .successHandler(oAuth2AuthenticationSuccessHandler)
-                        .failureHandler(oAuth2AuthenticationFailureHandler));
+                        .failureHandler(oAuth2AuthenticationFailureHandler))
+                        .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) ;
         return http.build();
     }
 }

@@ -1,4 +1,5 @@
 package com.example.javacodebase.model;
+import com.example.javacodebase.model.enums.AuthProvider;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
